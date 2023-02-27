@@ -45,6 +45,7 @@ class TableDataManiplation(ReadTable):
     def Add(self):
         def Valuez():
             parent_list = []
+            '''
             #COUNTING METHOD
             counters = int(input("How Many Rows Would You Like to Add = "))
             for x in range(counters):
@@ -54,7 +55,23 @@ class TableDataManiplation(ReadTable):
                     child_listTOtuple.append(val_input)    
                 child_listTOtuple = tuple(child_listTOtuple)
                 parent_list.append(child_listTOtuple)
-            pass
+            '''
+            #DIRECT METHOD
+            while True:
+                breaker_statement = input("Do You Want to Add More Data to the Database (y/n) :")
+                if breaker_statement == "y":
+                    pass
+                elif breaker_statement == "n":
+                    break
+                else:
+                    print("TRY AGAIN \n")
+                    continue
+                for y in self.corresponding_tuple:
+                    child_listTOtuple = [] # tuplez = ()
+                    val_input = input("Enter the Value of Column "+y+" =")
+                    child_listTOtuple.append(val_input)    
+                child_listTOtuple = tuple(child_listTOtuple)
+                parent_list.append(child_listTOtuple)    
             return parent_list
         query = "INSERT INTO "+self.tn+" "+self.correspondingFeilds+" VALUES "+self.correspondingValue+";"
         # print(query)
