@@ -130,21 +130,18 @@ class Creations(Initilisation):
                     if (AttributeParameter in CapitalVariations(["String", "Str", "Varchar","Var","CHAR","TEXT"])):
                             AttributeParameter = "VARCHAR"+Value
                             break
-                    if (AttributeParameter in CapitalVariations(["DECIMAL","Dec","Float","DOUBLE"])):
+                    elif (AttributeParameter in CapitalVariations(["DECIMAL","Dec","Float","DOUBLE"])):
                             AttributeParameter = "DECIMAL"+Value
                             break
                     elif (AttributeParameter in CapitalVariations(["TINYTEXT","MEDIUMTEXT","LONGTEXT",'TINYINT', 'DATETIME', 'BOOLEAN', 'REAL', 'VARBINARY', 'TIMESTAMP', 'YEAR', 'datetimeoffset', 'FLOAT', 'BOOL', 'BINARY', 'datetime2', 'DOUBLE', 'BIGINT', 'ENUM', 'smalldatetime', 'DATE', 'PRECISION', 'INT', 'TIME', 'SET', 'image', 'SMALLINT', 'BLOB'])):
-                        variations_list = CapitalVariations(["TINYTEXT","MEDIUMTEXT","LONGTEXT",'TINYINT', 'DATETIME', 'BOOLEAN', 'REAL', 'VARBINARY', 'TIMESTAMP', 'YEAR', 'datetimeoffset', 'FLOAT', 'BOOL', 'BINARY', 'datetime2', 'DOUBLE', 'BIGINT', 'ENUM', 'smalldatetime', 'DATE', 'PRECISION', 'INT', 'TIME', 'SET', 'image', 'SMALLINT', 'BLOB'])
-                        for i, sublist in enumerate(AttributeParameter):
-                            if AttributeParameter in sublist:
-                                index_value = (i, sublist.index(AttributeParameter))
-                                val = variations_list[index_value[0]][index_value[1]]
-                                VAL = val.upper()
-                                AttributeParameter = VAL + Value
-                                break
-                            else:
-                                # print("Not found")
-                                continue
+                        l = ["TINYTEXT","MEDIUMTEXT","LONGTEXT",'TINYINT', 'DATETIME', 'BOOLEAN', 'REAL', 'VARBINARY', 'TIMESTAMP', 'YEAR', 'datetimeoffset', 'FLOAT', 'BOOL', 'BINARY', 'datetime2', 'DOUBLE', 'BIGINT', 'ENUM', 'smalldatetime', 'DATE', 'PRECISION', 'INT', 'TIME', 'SET', 'image', 'SMALLINT', 'BLOB']
+                        variations_list = CapitalVariations(l)
+                        if AttributeParameter in variations_list:
+                            Common = list(set(l) & set(CapitalVariations(AttributeParameter)))
+                            val = Common[0]
+                            VAL = val.upper()
+                            AttributeParameter = VAL+Value
+                        break                    
                 else:
                     # Split the string at the first space character
                     Attribute, value = AttributeParameter.split(' ', 1)
@@ -171,17 +168,14 @@ class Creations(Initilisation):
                     #     AttributeParameter = "INT "+Value
                     #     break
                     elif (AttributeParameter in CapitalVariations(["TINYTEXT","MEDIUMTEXT","LONGTEXT",'TINYINT', 'DATETIME', 'BOOLEAN', 'REAL', 'VARBINARY', 'TIMESTAMP', 'YEAR', 'datetimeoffset', 'FLOAT', 'BOOL', 'BINARY', 'datetime2', 'DOUBLE', 'BIGINT', 'ENUM', 'smalldatetime', 'DATE', 'PRECISION', 'INT', 'TIME', 'SET', 'image', 'SMALLINT', 'BLOB'])):
-                        variations_list = CapitalVariations(["TINYTEXT","MEDIUMTEXT","LONGTEXT",'TINYINT', 'DATETIME', 'BOOLEAN', 'REAL', 'VARBINARY', 'TIMESTAMP', 'YEAR', 'datetimeoffset', 'FLOAT', 'BOOL', 'BINARY', 'datetime2', 'DOUBLE', 'BIGINT', 'ENUM', 'smalldatetime', 'DATE', 'PRECISION', 'INT', 'TIME', 'SET', 'image', 'SMALLINT', 'BLOB'])
-                        for i, sublist in enumerate(AttributeParameter):
-                            if AttributeParameter in sublist:
-                                index_value = (i, sublist.index(AttributeParameter))
-                                val = variations_list[index_value[0]][index_value[1]]
-                                VAL = val.upper()
-                                AttributeParameter = VAL+" "+Value
-                                break
-                            else:
-                                # print("Not found")
-                                continue
+                        l = ["TINYTEXT","MEDIUMTEXT","LONGTEXT",'TINYINT', 'DATETIME', 'BOOLEAN', 'REAL', 'VARBINARY', 'TIMESTAMP', 'YEAR', 'datetimeoffset', 'FLOAT', 'BOOL', 'BINARY', 'datetime2', 'DOUBLE', 'BIGINT', 'ENUM', 'smalldatetime', 'DATE', 'PRECISION', 'INT', 'TIME', 'SET', 'image', 'SMALLINT', 'BLOB']
+                        variations_list = CapitalVariations(l)
+                        if AttributeParameter in variations_list:
+                            Common = list(set(l) & set(CapitalVariations(AttributeParameter)))
+                            val = Common[0]
+                            VAL = val.upper()
+                            AttributeParameter = VAL+" "+Value
+                        break                    
             if (ColumnCounter != 1):
                 QueryAttributes = QueryAttributes+AttributeName+" "+AttributeParameter+","
             else:
@@ -194,7 +188,9 @@ class Creations(Initilisation):
         # with Attributes also
         pass
     def Delete(self):
-        #ToDo,...
+        query = "DROP TABLE "+self.tn+";"
+        self.cr.execute(query)
+        self.db.commit() # commit changes to database
         pass   
 class Replace(Creations):
     def __init__(self, cr, db, TableName):
