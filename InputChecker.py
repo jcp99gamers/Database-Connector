@@ -1,22 +1,24 @@
-# import numpy as np
+import numpy as np
 def Code(word):
-    variations = [word.lower(), word.upper(), word.capitalize()]
-    for i in range(2 ** len(word)):
-        temp = ""
+    ChildList = []
+    lowercase_word = word.lower()
+    for i in range(2**len(lowercase_word)):
+        binary = format(i, '0' + str(len(word)) + 'b')
+        new_word = ""
         for j in range(len(word)):
-            if (i >> j) % 2 == 1:
-                temp += word[j].upper()
+            if binary[j] == "1":
+                new_word += word[j].upper()
             else:
-                temp += word[j].lower()
-        variations.append(temp)
-    return list(set(variations))
+                new_word += word[j].lower()
+        # print(new_word)
+        ChildList.append(new_word)
+    return ChildList
+
 def CapitalVariations(word):
+    ParentList = []
     if type(word) == str:
-        return Code(word)
+        ParentList = Code(word)
     elif type(word) == list:
-        temp = []
-        for x in word:
-            temp.append(Code(x))
-        # variations = np.array(temp)
-        # return variations
-        return temp
+        for Child in word:
+            ParentList += Code(Child)
+    return ParentList
