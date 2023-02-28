@@ -188,7 +188,7 @@ class Creations(Initilisation):
         # with Attributes also
         pass
     def Delete(self):
-        query = "DROP TABLE "+self.tn+";"
+        query = "DROP TABLE IF EXISTS "+self.tn+";"
         self.cr.execute(query)
         self.db.commit() # commit changes to database
         pass   
