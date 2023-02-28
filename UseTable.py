@@ -33,12 +33,23 @@ if TableName in TableList:
             continue
     while (TableManuplation in CapitalVariations("Manage") ):
         # UserInput = input("Do You Want to 'ADD', 'UPDATE' or 'READ' Data from the Database:")
-        UserInput = "Add"
+        UserInput = "Read"
         if UserInput in CapitalVariations("Add"):
             tb.Add()
             break
         elif UserInput in CapitalVariations("Read"):
-            tb.Read()
+            while True:
+                # UzerInzput = input("Do You Want to 'READ' the Data or Search 'WHERE' a Particualar Data Exists in the Table =")
+                UzerInzput = "WHERE"
+                if(UzerInzput in CapitalVariations("READ")):
+                    print(tb.Read_DataFrame())
+                    break
+                elif(UzerInzput in CapitalVariations("WHERE")):
+                    print(tb.Where())
+                    break
+                else:
+                    print("TRY AGAIN")
+                    continue
             break
         elif UserInput in CapitalVariations("Update"):
             tb.Update()

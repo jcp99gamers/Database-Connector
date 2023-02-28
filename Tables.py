@@ -7,6 +7,10 @@ class Initilisation:
         self.cr = cr
         self.db = db
         self.tn = TableName
+    def Read_DataFrame(self, Where=True):
+        self.df = pd.read_sql('SELECT * FROM '+self.tn+' where '+str(Where), con=self.db)
+        return self.df
+        pass    
 class ReadTable(Initilisation):
     def __init__(self, cr, db, TableName):
         super().__init__(cr, db, TableName)
@@ -24,10 +28,20 @@ class ReadTable(Initilisation):
         self.Key = [row[3] for row in self.rows]
         self.Default = [row[4] for row in self.rows]
         self.Extra = [row[5] for row in self.rows]
-    def Read(self):
-        pass
-    def DataFrame(self):
-        pass
+    def Where(self):
+        Wherez = input("What Do You Wana Search for in the Database = ")
+        self.df = super().Read_DataFrame()
+        try:
+            Wherez = int(Wherez)
+        except:
+            search_values = CapitalVariations(Wherez) # create a list of values to search for
+            result_series = self.df.applymap(lambda x: x in search_values).any(axis=1) # use applymap and any to get a boolean series indicating which rows contain any of the search values
+            result_df = self.df[result_series] # filter the original DataFrame with the boolean series
+        else:
+            mask = self.df.eq(Wherez).any(axis=1) # Search for the value in the DataFrame
+            result_df = self.df[mask] # Filter the DataFrame using boolean indexing
+        finally:
+            return result_df  #WhereDF = (self.df == Wherez).any().any()
 class TableDataManiplation(ReadTable):
     def __init__(self, cr, db, TableName):
         super().__init__(cr, db, TableName)
